@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import pandas as pd
 import os 
 
 # define the flask app object
@@ -91,10 +92,11 @@ def upload_file():
     obj.save(obj_filename) # <--- note that you can always change this name with a variable that you pass from the endpoint
 
     # you can check to see if the file has been saved
-    print('file located at:', os.getcwd()+'/'+obj_filename)
-
+    fpath = os.getcwd()+'/'+obj_filename
+    print('file located at:', fpath)
+    d = pd.read_csv(fpath).to_json(orient="records")
     # you can send any kind of response back
-    return jsonify({"result": "uploaded"}), 201
+    return jsonify({"result": "uploaded","data":d}), 201
 
 
 # you can also pass a variable based on the url
